@@ -1,7 +1,66 @@
-h1{
-    color:green;
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
 }
-.fa-facebook{
-    font-size: 50px;
-    color:#3b5998;
+
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#AccountInfo {
+    display: flex;
+    flex-direction: column;
+    width:80%;
+    font-size: 18px;
+}
+
+.accountDetail {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+.value  {
+    flex:4;
+}
+
+.key {
+    flex:1;
+    text-align: left;
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+.keytransaction {
+    flex:1;
+    text-align: right;
+    font-weight: bold;
+}
+
+.transValue{
+    flex: 1;
+    margin-left: 20px;
+}
+
+#accountSummaryTitle {
+    text-align: center;
+    color: lightblue;
+    font: 17px;
+    padding: 20px;
+}
+
+#personalInfo {
+    background: white;
+    border-top: 1px solid black;
+    padding: 20px;
+}
+
+#transactionSummary {
+    background: lemonchiffon;
+    padding: 20px;
+    border-top: 1px solid black;
 }
