@@ -32,11 +32,22 @@ let personalAccount = {
               <div class="accountDetail"><div class="key">Email:</div> <div class="value">${personalAccount.email}</div></div>
             </div>
             <div id="transactionSummary">              
-              <div class="accountDetail"><div class="keytransaction">Total Income:</div> <div class="transValue"> ${personalAccount.totalIncome()}£</div></div>
-              <div class="accountDetail"><div class="keytransaction">Total Expense:</div> <div class="transValue">${personalAccount.totalExpense()}£</div></div>
-              <div class="accountDetail"><div class="keytransaction">Balance:</div> <div class="transValue">${personalAccount.totalIncome() - personalAccount.totalExpense()}£</div></div>
+              <div class="accountDetail"><div class="keytransaction">Total Income:</div> <div class="transValue"> <p>${personalAccount.totalIncome()} £</p></div></div>
+              <div class="accountDetail"><div class="keytransaction">Total Expense:</div> <div class="transValue"><p>${personalAccount.totalExpense()} £</p></div></div>
+              <div class="accountDetail"><div class="keytransaction">Balance:</div> <div class="transValue"><p>${personalAccount.totalIncome() - personalAccount.totalExpense()} £</p></div></div>
             </div> 
             `
+  },
+  dailyTransactions: ()=>{
+    return `
+    <div>
+    <input type="text"> <input type="text"> 
+    <select name="transType" id="transType">
+        <option>Expense</option>
+        <option>Income</option>
+    </select>
+    </div>
+    `
   },
   accountBalance: function () {
     let blance =  0;
@@ -63,4 +74,10 @@ personalAccount.addExpense();
 
 */
 
-document.querySelector('#AccountInfo').innerHTML = personalAccount.accountInfo();
+function accountInfo(){
+document.querySelector('#container').innerHTML = personalAccount.accountInfo();
+}
+
+function dailyTransactions (){
+  document.querySelector('#container').innerHTML = personalAccount.dailyTransactions();
+}
