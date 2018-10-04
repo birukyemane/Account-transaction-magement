@@ -1,97 +1,124 @@
+// this object stores personal account info 
 let personalAccount = {
-  IBAN: 'FINDA23423433534',
   firstName : 'Brook',
   lastName : 'Habteselassie',
-  address : 'ABC Helsinki Finland',
-  telephone: '0988768764',
-  email: 'brook@gmail.com',
-  incomes : [{description : 'salary', amount :36000},
-             {description: 'bonus', amount: 10000},
-             {description: 'online courses', amount :5500}],
-  expenses : [{descripton:'rent', amount:18000},
-              {description:'shopping', amount: 6000},
-              {descrition: 'travel', amount: 3000}],
-  
+  incomes : [{description : 'salary', amount :36000, time:'09/03/2018 11:30'},
+             {description: 'bonus', amount: 10000, time:'10/03/2018 11:30'},
+             {description: 'online courses', amount :5500, time:'08/03/2018 11:30'}],
+  expenses : [{description:'rent', amount:18000, time:'09/03/2018 11:30'},
+              {description:'shopping', amount: 6000, time:'10/03/2018 11:30'},
+              {description: 'travel', amount: 3000, time:'10/03/2018 11:30'}],
+
   calculateTotal :(accumulator, currentValue) => accumulator + currentValue.amount,  
 
   totalIncome : function(){
     return this.incomes.reduce(this.calculateTotal, 0);
   },  
-
   totalExpense : function(total){        
     return this.expenses.reduce(this.calculateTotal, 0);
+  },  
+  accountBalance: function () {
+    return this.totalIncome() - this.totalExpense();
   },
-  accountInfo: function () {
-    return `<h2 id="accountSummaryTitle">Account Summary</h2>
-            <div id="personalInfo">              
-              <div class="accountDetail"><div class="key">Account Number:</div>  <div class="value">${personalAccount.IBAN}</div></div>
-              <div class="accountDetail"><div class="key">Last Name:</div> <div class="value">${personalAccount.lastName}</div></div>
-              <div class="accountDetail"><div class="key">First Name:</div> <div class="value">${personalAccount.firstName}</div></div>
-              <div class="accountDetail"><div class="key">address:</div> <div class="value">${personalAccount.address}</div></div>
-              <div class="accountDetail"><div class="key">Telephone:</div> <div class="value">${personalAccount.telephone}</div></div>
-              <div class="accountDetail"><div class="key">Email:</div> <div class="value">${personalAccount.email}</div></div>
-            </div>
-            <div id="accountSummary">              
-              <div class="accountDetail"><div class="keytransaction">Total Income:</div> <div class="transValue"> <p>${personalAccount.totalIncome()} £</p></div></div>
-              <div class="accountDetail"><div class="keytransaction">Total Expense:</div> <div class="transValue"><p>${personalAccount.totalExpense()} £</p></div></div>
-              <div class="accountDetail"><div class="keytransaction">Balance:</div> <div class="transValue"><p>${personalAccount.totalIncome() - personalAccount.totalExpense()} £</p></div></div>
-            </div> 
-            `
+  addIncome : function(description,amount,time) {  
+    this.incomes.unshift({description, amount,time});
   },
-  dailyTransactions: ()=>{
-    return `
-    <h2 id="TransactionTitle">Transactions</h2>
-    <div id="transactionInput" >
-      <input type="text" id="description" placeholder="description"> <input type="text" id="amount" placeholder="amount"> 
+  addExpense : function(description,amount,time) {    
+    this.expenses.unshift({description, amount,time});
+  },
+  accountInfo: function (){
+    return `<h2 id="mainTitle">Personal Account</h2>               
+       <div id="name">Name: ${personalAccount.lastName} ${personalAccount.firstName}</div>
+       <div id="balanceInfo">
+        <div id="accountSummaryTitle">Total Income: ${personalAccount.totalIncome()}</div>
+        <div id="accountSummaryTitle">Total Expense: ${personalAccount.totalExpense()}</div>
+        <hr />
+        <div id="accountSummaryTitle">Balance: ${personalAccount.accountBalance()}</div>
+       </div>`;
+  },
+  summary: function (){
+    let incomes = personalAccount.incomes.map(income =>{
+      return `<div id="transactionInfo"> <div class="transactionDetail">${income.description}</div> 
+      <div class="amount transactionDetail">${income.amount}</div>
+      <div class="transactionDetail"> ${income.time}</div>
+      </div>`;}).join('');
+    let expenses = personalAccount.expenses.map(expense=>{
+      return `<div id="transactionInfo"> <div class="transactionDetail">${expense.description}</div> 
+      <div class="amount transactionDetail">${expense.amount}</div>
+      <div class="transactionDetail"> ${expense.time}</div>
+      </div>`;}).join('');
+    return  `
+    <div>
+    <div id="addtransaction">
+      <input type="text" id="description" placeholder="description">
+      <input type="number" min="0" id="amount" placeholder="amount"> 
       <select name="transactionType" id="transactionType">
           <option>Expense</option>
           <option>Income</option>
       </select>
-      <button id="Add" onclick="addTransactioin()">Add</button>
+      <button id="addButton" onclick="personalAccount.add()">Add</button>
     </div>
-    <div id="transactionSummary">
-      
     </div>
-    `
-    },
-  accountBalance: function () {
-    let blance =  0;
-    return `Balance : ${this.totalIncome() - this.totalExpense()}`;
+    <div id="summaryCointainer">      
+      <div id="incomeSummary"> 
+        <h2 class="summaryTitles">Incomes</h2>  
+          <div id="transactionInfo"> 
+            <div class="transactionDetail transactionTitle">Description</div> 
+            <div class=" amount transactionDetail transactionTitle">Amount (£)</div>
+            <div class="transactionDetail transactionTitle">Time</div> 
+          </div>    
+        ${incomes}
+      </div>
+      <div id="expenseSummary">
+        <h2 class="summaryTitles">Expenses</h2>
+          <div id="transactionInfo">
+            <div class="transactionDetail transactionTitle">Description</div> 
+            <div class=" amount transactionDetail transactionTitle">Amount (£)</div>
+            <div class="transactionDetail transactionTitle">Time</div>
+          </div>        
+        ${expenses}   
+      </div>    
+    </div>`;
   },
-
-  addIncome : function(description,amount) {  
-    console.log(description);  
-    this.incomes.push({description, amount});
-  },
-
-  addExpense : function(description,amount) {    
-    this.expenses.push({description, amount});
-  }
+  add : function (){
+    let time = displayDateTime();
+    let description = document.querySelector('#description').value;
+    let amount = Number(document.querySelector('#amount').value);
+    let type = document.querySelector('#transactionType').value;  
+    if(type == 'Income') {
+      personalAccount.addIncome(description,amount,time);
+    }
+    else {
+      personalAccount.addExpense(description,amount,time);
+    } 
+    document.querySelector('#accountInfo').innerHTML = this.accountInfo();
+    document.querySelector('#transactions').innerHTML = this.summary();
+  }    
 }
 
-/*
-personalAccount.accountInfo();
-personalAccount.addIncome();
-personalAccount.addExpense();
+// helper functions 
 
-*/
+function displayDateTime (){
+  var today = new Date();
+  var mn = today.getMinutes();
+  var hh = today.getHours();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
 
-function accountInfo(){
-document.querySelector('#container').innerHTML = personalAccount.accountInfo();
+  if(dd<10) {
+      dd = '0'+dd
+  } 
+
+  if(mm<10) {
+      mm = '0'+mm
+  } 
+
+  today = mm + '/' + dd + '/' + yyyy + ' '+  hh + ':' + mn;
+  return today;
 }
 
-function dailyTransactions (){
-  document.querySelector('#container').innerHTML = personalAccount.dailyTransactions();
-}
+// when page loads 
 
-function addTransactioin(){
-  let description = document.querySelector('#description').value;
-  let amount = Number(document.querySelector('#amount').value);
-  let type = document.querySelector('#transactionType').value;
-  if(type =='Income'){
-    console.log(description);
-    personalAccount.addIncome(description,amount);
-  }else {
-    personalAccount.addExpense(description,amount);
-  }
-}
+document.querySelector('#accountInfo').innerHTML = personalAccount.accountInfo();
+document.querySelector('#transactions').innerHTML = personalAccount.summary();
