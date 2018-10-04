@@ -11,12 +11,11 @@ body{
 }
 
 header{
-    border: 1px solid red;
     width:80%;
     padding: 20px;
 }
 
-button{
+header > button{
     border: none;
     width:20%;
     padding: 15px;
@@ -55,7 +54,7 @@ button{
     margin-left: 20px;
 }
 
-#accountSummaryTitle {
+#accountSummaryTitle, #TransactionTitle {
     text-align: center;
     color: lightblue;
     font: 17px;
@@ -69,12 +68,30 @@ button{
     font-size: 18px;
 }
 
-#transactionSummary {
+#accountSummary {
     background: lemonchiffon;
     padding: 20px;
     border-top: 1px solid black;
 }
 
-input {
-    
+#transactionInput {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid black;
+    padding: 20px;
+
+}
+
+#transactionInput > button {
+    flex: 1;
+}
+
+#description, #amount {
+    flex: 2;
+    margin-right: 5px;
+}
+
+#transType {
+    flex:1;
+    margin-right: 5px;    
 }

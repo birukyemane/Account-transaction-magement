@@ -31,7 +31,7 @@ let personalAccount = {
               <div class="accountDetail"><div class="key">Telephone:</div> <div class="value">${personalAccount.telephone}</div></div>
               <div class="accountDetail"><div class="key">Email:</div> <div class="value">${personalAccount.email}</div></div>
             </div>
-            <div id="transactionSummary">              
+            <div id="accountSummary">              
               <div class="accountDetail"><div class="keytransaction">Total Income:</div> <div class="transValue"> <p>${personalAccount.totalIncome()} £</p></div></div>
               <div class="accountDetail"><div class="keytransaction">Total Expense:</div> <div class="transValue"><p>${personalAccount.totalExpense()} £</p></div></div>
               <div class="accountDetail"><div class="keytransaction">Balance:</div> <div class="transValue"><p>${personalAccount.totalIncome() - personalAccount.totalExpense()} £</p></div></div>
@@ -40,30 +40,32 @@ let personalAccount = {
   },
   dailyTransactions: ()=>{
     return `
-    <div>
-    <input type="text"> <input type="text"> 
-    <select name="transType" id="transType">
-        <option>Expense</option>
-        <option>Income</option>
-    </select>
+    <h2 id="TransactionTitle">Transactions</h2>
+    <div id="transactionInput" >
+      <input type="text" id="description" placeholder="description"> <input type="text" id="amount" placeholder="amount"> 
+      <select name="transactionType" id="transactionType">
+          <option>Expense</option>
+          <option>Income</option>
+      </select>
+      <button id="Add" onclick="addTransactioin()">Add</button>
+    </div>
+    <div id="transactionSummary">
+      
     </div>
     `
-  },
+    },
   accountBalance: function () {
     let blance =  0;
     return `Balance : ${this.totalIncome() - this.totalExpense()}`;
   },
 
-  addIncome : function() {
-    let incomeDescription = prompt('Enter income description');
-    let incomeAmount = Number(prompt('Enter income amount'));
-    this.incomes.push({description:incomeDescription, amount: incomeAmount});
+  addIncome : function(description,amount) {  
+    console.log(description);  
+    this.incomes.push({description, amount});
   },
 
-  addExpense : function() {
-    let expenseDescription = prompt('Enter expense description');
-    let expenseAmount = Number(prompt('Enter expense amout'));
-    this.expenses.push({description: expenseDescription, amount: expenseAmount});
+  addExpense : function(description,amount) {    
+    this.expenses.push({description, amount});
   }
 }
 
@@ -80,4 +82,16 @@ document.querySelector('#container').innerHTML = personalAccount.accountInfo();
 
 function dailyTransactions (){
   document.querySelector('#container').innerHTML = personalAccount.dailyTransactions();
+}
+
+function addTransactioin(){
+  let description = document.querySelector('#description').value;
+  let amount = Number(document.querySelector('#amount').value);
+  let type = document.querySelector('#transactionType').value;
+  if(type =='Income'){
+    console.log(description);
+    personalAccount.addIncome(description,amount);
+  }else {
+    personalAccount.addExpense(description,amount);
+  }
 }
